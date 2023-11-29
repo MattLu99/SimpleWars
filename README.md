@@ -1,5 +1,5 @@
 # Simple Wars
-This is the project I made for a university assigment in 2019. The making of this game was a great learning experience for me in Python. The game uses TKinter for GUI setup windows and pygame for the actual game itself.
+This is the project I made for a university assigment in 2019 and the making of this game was a great learning experience for me in Python. The game uses TKinter for GUI setup windows and pygame for the actual game itself. The game is based on the "Advance Wars" games.
 
 ## Controls
 ### Mouse
