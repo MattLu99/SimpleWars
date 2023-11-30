@@ -105,7 +105,7 @@ def get_units():
     return ["Infantry", "Sniper", "Bazooka", "Mortar", "Biker", "Jeep", "Light tank", "Tank", "Heavy tank", "Flamethrower", "Artilery", "Rocket"]
 
 def get_prices():
-    return {0: 10, 1: 40, 2: 30, 3: 60, 4: 50, 5: 80, 6: 80, 7: 100, 8: 150, 9: 110, 10: 90, 11: 130, 12: 0, 13: 0, 14: 0, 15: 0}
+    return {0: 10, 1: 40, 2: 30, 3: 70, 4: 50, 5: 80, 6: 80, 7: 100, 8: 160, 9: 120, 10: 130, 11: 180, 12: 0, 13: 0, 14: 0, 15: 0}
 
 def spawn_infantry(team):
     unit_types = get_units()
@@ -117,15 +117,15 @@ def spawn_sniper(team):
 
 def spawn_bazooka(team):
     unit_types = get_units()
-    return Unit(unit_types[2], team, "Foot", 3, True, 6, 0.9, "Piercing", 6)
+    return Unit(unit_types[2], team, "Foot", 3, True, 7, 1, "Piercing", 6)
 
 def spawn_mortar(team):
     unit_types = get_units()
-    return Unit(unit_types[3], team, "Foot", 2, False, 6, 0.9, "Explosives", 5, 3, 2)
+    return Unit(unit_types[3], team, "Foot", 2, False, 7, 0.8, "Explosives", 5, 3, 2)
 
 def spawn_biker(team):
     unit_types = get_units()
-    return Unit(unit_types[4], team, "Wheels", 5, True, 6, 1, "Bullets", 6)
+    return Unit(unit_types[4], team, "Wheels", 5, True, 6, 1, "Bullets", 5)
 
 def spawn_jeep(team):
     unit_types = get_units()
@@ -145,7 +145,7 @@ def spawn_heavytank(team):
 
 def spawn_flamethrower(team):
     unit_types = get_units()
-    return Unit(unit_types[9], team, "Tracks", 5, True, 2, 2.6, "Explosives", 6)
+    return Unit(unit_types[9], team, "Tracks", 5, True, 2, 2.4, "Explosives", 6)
 
 def spawn_artillery(team):
     unit_types = get_units()

@@ -259,7 +259,6 @@ def __road_connections(rawmap, row, column, x, y):
             return __bottom_row(rawmap, row, column, roadconnectors)
         else:
             return __center_roads(rawmap, row, column, roadconnectors)
-    return 'RCI'
 
 def __block_translator(onblock, window, onwindow):
     images = __TerrainImages()

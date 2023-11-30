@@ -1,4 +1,3 @@
-import os
 import pygame as py
 import pygame.gfxdraw as pgfx
 
