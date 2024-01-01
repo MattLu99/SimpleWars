@@ -7,6 +7,8 @@ import game
 import display
 
 class Window:
+    """Class used to display the setup screen before the game."""
+
     location = 'Maps'
     filelist = os.listdir(location)
     window = tk.Tk()
@@ -16,10 +18,12 @@ class Window:
         self.__window_setup(width, height)
         self.__window_elements()
 
-    def game_start(self):
+    def game_start(self) -> None: 
+        """Starts the setup window."""
         self.window.mainloop()
 
-    def __window_setup(self, width, height):
+    def __window_setup(self, width: int, height: int) -> None:
+        """Opens the setup window."""
         x = (self.window.winfo_screenwidth() // 2) - (width // 2)
         y = (self.window.winfo_screenheight() // 2) - (height // 2)
         self.window.geometry("{}x{}+{}+{}".format(width, height, x, y))
@@ -27,21 +31,24 @@ class Window:
         self.window['bg'] = self.bgcolor
         self.window.title("Simple Wars")
 
-    def __window_elements(self):
+    def __window_elements(self) -> None:
+        """Places the elements on the setup window."""
         tk.Label(self.window, text="Simple Wars", font=("Broadway", 46), bg=self.bgcolor).pack()
         self.__display_teams()
         self.__playernames_entry()
         self.__mapselect_combobox()
         self.__extras_info()
 
-    def __display_teams(self):
+    def __display_teams(self) -> None:
+        """Places the team selections."""
         teamsdisplay = tk.Frame(self.window, bg=self.bgcolor)
         teamsdisplay.pack()
         tk.Label(teamsdisplay, text="Red team", font=("Arial Bold", 12), bg="#d32f2f").pack(side=tk.LEFT)
         tk.Label(teamsdisplay, width=10, bg=self.bgcolor).pack(side=tk.LEFT)
         tk.Label(teamsdisplay, text="Blue team", font=("Arial Bold", 12), bg="#0d48a1").pack(side=tk.RIGHT)
 
-    def __playernames_entry(self):
+    def __playernames_entry(self) -> None:
+        """Places the player name inputs."""
         playernames = tk.Frame(self.window, bg=self.bgcolor)
         playernames.pack()
         self.player1 = tk.Entry(playernames)
@@ -50,7 +57,8 @@ class Window:
         self.player2 = tk.Entry(playernames)
         self.player2.pack(side=tk.RIGHT)
 
-    def __mapselect_combobox(self):
+    def __mapselect_combobox(self) -> None:
+        """Places the map selector in a combobox."""
         mapselect = tk.Frame(self.window, bg=self.bgcolor)
         mapselect.pack()
         tk.Label(mapselect, text="Maps:", font=("Arial Bold", 12), bg=self.bgcolor).pack(side=tk.LEFT)
@@ -58,13 +66,15 @@ class Window:
         self.mapcbox.pack(side=tk.LEFT)
         tk.Button(mapselect, text="Start game", command=lambda:self.__get_gamemap()).pack(side=tk.RIGHT)
 
-    def __extras_info(self):
+    def __extras_info(self) -> None:
+        """Places the buttons for the extra features."""
         tk.Label(self.window, bg=self.bgcolor).pack()
-        tk.Button(self.window, text="Game history", font=("Arial Bold", 15), command=lambda:self.__get_toplist(), width=15).pack()
+        tk.Button(self.window, text="Game history", font=("Arial Bold", 15), command=lambda:self.__get_history(), width=15).pack()
         tk.Label(self.window, bg=self.bgcolor).pack()
-        tk.Button(self.window, text="How to play", font=("Arial Bold", 15), command=lambda:self.__get_gamerules(), width=15).pack()
+        tk.Button(self.window, text="How to play", font=("Arial Bold", 15), command=lambda:self.__get_controls(), width=15).pack()
 
-    def __viewinfo(self):
+    def __viewinfo(self) -> list:
+        """Returns with the names of the maps in a list."""
         viewlist = []
         for file in self.filelist:
             if '_' in file:
@@ -73,7 +83,8 @@ class Window:
                 viewlist.append(self.__to_show(file.split(' ')))
         return viewlist
 
-    def __to_show(self, name):
+    def __to_show(self, name: str) -> None:
+        """Modifies map names for display."""
         n = len(name)
         if name[n - 1].endswith(".txt"):
             name[n - 1] = name[n - 1].replace(".txt", "", 1)
@@ -83,7 +94,8 @@ class Window:
             name[i] = name[i][0].upper() + name[i][1:]
         return ' '.join(name)
 
-    def __get_gamemap(self):
+    def __get_gamemap(self) -> None:
+        """Starts a new game, if the given setup and map passes all checks."""
         if self.player1.get() == "" or self.player2.get() == "":
             showinfo("Error!", "Both players are required to have a name!")
         elif self.mapcbox.current() == -1:
@@ -108,7 +120,8 @@ class Window:
             else:
                 showinfo("Error!", "The selected item is not a text file!")
 
-    def __map_reader(self, path):
+    def __map_reader(self, path: str) -> tuple:
+        """Gets the path to the selected map and processes it. Returns with all the needed data in a tuple."""
         rawmap = []
         try:
             with open(path, "rt", encoding="utf-8") as file:
@@ -125,7 +138,8 @@ class Window:
         except PermissionError:
             return [], 0, 0
 
-    def __map_fits_needs(self, rawmap, x, y):
+    def __map_fits_needs(self, rawmap: [], x: int, y: int) -> bool:
+        """Checks if the selected map is valid and can be played on."""
         hqnum = 0
         wsnum = 0
         for line in rawmap:
@@ -136,7 +150,8 @@ class Window:
                     wsnum += 1
         return hqnum != 2 or wsnum < 2 or x < 10 or y < 10
 
-    def __get_toplist(self):
+    def __get_history(self) -> None:
+        """Displays history in a new window."""
         try:
             matchhistory = []
             with open("matchhistory.txt", "rt", encoding="utf-8") as f:
@@ -146,5 +161,6 @@ class Window:
         except FileNotFoundError:
             display.matchhistory(["No game history data stored."])
 
-    def __get_gamerules(self):
+    def __get_controls(self) -> None:
+        """Displays controls in a new window."""
         display.info()
