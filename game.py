@@ -1,4 +1,3 @@
-import os
 import pygame as py
 import pygame.gfxdraw as pgfx
 
@@ -187,7 +186,7 @@ class Start:
         terrain_title = font.render("{}{}".format("" if terrain.team is None else terrain.team + " ", terrain.type), True, self.toolbar_fgcolor if terrain.team is None else teamcolor)
         font = py.font.SysFont("Arial Bold", 16)
         capture_info = "Capture: {}%".format(terrain.remaining_health()) if terrain.capturable else ""
-        terrain_info1 = font.render("Defence: {}    {}".format(terrain.defense, capture_info), True, self.toolbar_fgcolor)
+        terrain_info1 = font.render("Defense: {}    {}".format(terrain.defense, capture_info), True, self.toolbar_fgcolor)
         valid_transports = ""
         if terrain.all_one_movement():
             valid_transports = "All movement types: 1"
@@ -339,12 +338,12 @@ class Start:
 
     def move_on_terrain(self, on, selected, turn):
         is_team_turn = self.unitmap[selected.x][selected.y].team == self.TEAMS[turn]
-        return is_team_turn and abs(on - selected) == 1 and self.unitmap[selected.x][selected.y].enough_move_left(self.terrainmap[on.x][on.y])
+        return is_team_turn and abs(on - selected) == 1 and self.unitmap[selected.x][selected.y].enough_moves_left(self.terrainmap[on.x][on.y])
 
     def keyboard_movement(self, selected, turn, xmod=0, ymod=0):
         is_team_turn = self.unitmap[selected.x][selected.y].team == self.TEAMS[turn]
         is_empty = self.unitmap[selected.x + xmod][selected.y + ymod] is None
-        return is_team_turn and self.unitmap[selected.x][selected.y].enough_move_left(self.terrainmap[selected.x + xmod][selected.y + ymod]) and is_empty
+        return is_team_turn and self.unitmap[selected.x][selected.y].enough_moves_left(self.terrainmap[selected.x + xmod][selected.y + ymod]) and is_empty
 
     def unit_movement(self, window, selected, on):
         terrains.block_draw(self.terrainmap[selected.x][selected.y], window, (selected.x * self.BLOCK, selected.y * self.BLOCK))

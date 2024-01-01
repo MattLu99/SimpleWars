@@ -1,7 +1,8 @@
 import pygame as py
 import pygame.gfxdraw as pgfx
 
-def __history_dimensions(list, letter_size):
+def __history_dimensions(list: list, letter_size: int) -> tuple:
+    """Takes the history list and sizes of letters and returns the needed size for the history window."""
     width = 0
     for score in list:
         if len(score) > width:
@@ -9,7 +10,8 @@ def __history_dimensions(list, letter_size):
     height = letter_size + letter_size // 2
     return width * (round(letter_size / 2.4)), height
 
-def matchhistory(list):
+def matchhistory(list: list) -> None:
+    """Displays the history in a new window."""
     py.init()
     letter_size = 30
     width, height = __history_dimensions(list, letter_size)
@@ -30,7 +32,8 @@ def matchhistory(list):
             quit = True
     py.quit()
 
-def draw_info(window, title, list, starting):
+def draw_info(window: object, title: str, list: list, starting: int) -> None:
+    """Draws a string list's elements onto the given window based on height."""
     title_font = py.font.SysFont('Arial Bold', 30)
     title_fgcolor = py.Color('SkyBlue')
     text_font = py.font.SysFont('Arial', 16)
@@ -41,7 +44,8 @@ def draw_info(window, title, list, starting):
         text = text_font.render(list[ind], True, text_fgcolor)
         window.blit(text, (4, ind * 18 + 30 + starting))
 
-def info():
+def info() -> None:
+    """Displays the control information in a new window."""
     py.init()
     window = py.display.set_mode((420, 280))
     py.display.set_caption("Controls")

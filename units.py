@@ -3,6 +3,7 @@ import pygame as pg
 from random import randint
 
 class __UnitImages:
+    """Class for statically storing the location of unit images."""
     location = os.path.join("Images", "Units")
     INF_1 = pg.image.load(os.path.join(location, "infantry1.png"))
     INF_2 = pg.image.load(os.path.join(location, "infantry2.png"))
@@ -30,6 +31,7 @@ class __UnitImages:
     RKL_2 = pg.image.load(os.path.join(location, "rocketlauncher2.png"))
 
 class Unit:
+    """Class for representing a unit and handling any actions taken on it."""
     moved = 0
     attacked = True
     health = 100
@@ -51,16 +53,19 @@ class Unit:
         self.maxrange = maxrange
         self.minrange = minrange
 
-    def attack_value(self, range=5):
+    def attack_value(self, range: float = 5) -> float:
+        """Returns the amount of damage the unit deals, with small randomness."""
         return (self.health / 100) * (self.attack * range + randint(0, range))
 
-    def defense_value(self, terrain):
+    def defense_value(self, terrain: object) -> float:
+        """Returns with the defense of the unit based on terrain."""
         defense = ((100 - (self.health / 10 * terrain.defense + self.defense)) / 50)
         if defense <= 0:
             return 0
         return defense
 
-    def getting_attacked(self, attacking, terrain):
+    def getting_attacked(self, attacking: object, terrain: object) -> None:
+        """Takes the attacking unit and terrain as parameters and handles how much damage the unit takes."""
         damage = attacking.attack_value() *  self.defense_value(terrain)
         if attacking.ammunition == "Bullets":
             self.health -= damage / self.armor
@@ -71,126 +76,102 @@ class Unit:
         else:
             self.health -= damage
     
-    def can_attack(self, turn_team, target, terrain):
+    def can_attack(self, turn_team: str, target: object, terrain: object) -> bool:
+        """Checks if a unit can attack in the current turn and returns it in a boolean."""
         return target is not None and not self.attacked and self.team == turn_team and (self.team != target.team or self.team != terrain.team)
 
-    def can_capture(self, terrain):
+    def can_capture(self, terrain: object) -> bool:
+        """Checks if a unit can capture the terrain it is standing and returns it in a boolean."""
         return self.capture and not self.attacked and terrain.capturable and terrain.team != self.team
 
-    def in_attack_range(self, distance):
+    def in_attack_range(self, distance: int) -> bool:
+        """Checks if the selection is in attack range and returns it in a boolean."""
         return distance >= self.minrange and distance <= self.maxrange
 
-    def enough_move_left(self, terrain):
+    def enough_moves_left(self, terrain: object) -> bool:
+        """Checks if the unit would make a valid move and has enough moves left, then returns this in a boolean."""
         return terrain.can_move_on(self.movement) and terrain.transports[self.movement] + self.moved <= self.speed
 
-    def has_moved(self, terrain):
+    def has_moved(self, terrain: object) -> None:
+        """Adds how much a unit has moved and removes its attack if its an indirect attacking unit."""
         if self.minrange != 1:
             self.attacked = True
         self.moved += terrain.transports[self.movement]
 
-    def has_attacked(self):
+    def has_attacked(self) -> None:
+        """Locks all further actions after a unit has attacked."""
         self.moved = self.speed
         self.attacked = True
 
-    def heal_up(self):
+    def heal_up(self) -> None:
+        """Restores 10 points of health to a unit and ensures there is no overflow."""
         self.health += 10
         if self.health > 100:
             self.health = 100
 
-    def reset_actions(self):
+    def reset_actions(self) -> None:
+        """Resets the actions of a unit, in preparation for a new turn."""
         self.moved = 0
         self.attacked = False
 
-def get_units():
-    return ["Infantry", "Sniper", "Bazooka", "Mortar", "Biker", "Jeep", "Light tank", "Tank", "Heavy tank", "Flamethrower", "Artilery", "Rocket"]
+def get_units() -> list:
+    """Function for statically storing the names of all of the units."""
+    return ["Gunner", "Sniper", "Bazooka", "Mortar", "Biker", "Jeep", "Light tank", "Tank", "Heavy tank", "Flamethrower", "Artilery", "Rocket"]
 
-def get_prices():
-    return {0: 10, 1: 40, 2: 30, 3: 60, 4: 50, 5: 80, 6: 80, 7: 100, 8: 150, 9: 110, 10: 90, 11: 130, 12: 0, 13: 0, 14: 0, 15: 0}
+def get_prices() -> list:
+    """Function for statically storing the prices of all of the units."""
+    return {0: 10, 1: 40, 2: 30, 3: 70, 4: 50, 5: 80, 6: 80, 7: 100, 8: 160, 9: 120, 10: 130, 11: 180, 12: 0, 13: 0, 14: 0, 15: 0}
 
-def spawn_infantry(team):
-    unit_types = get_units()
-    return Unit(unit_types[0], team, "Foot", 3, True, 7, 0.9, "Bullets", 5)
-
-def spawn_sniper(team):
-    unit_types = get_units()
-    return Unit(unit_types[1], team, "Foot", 2, True, 8, 0.8, "Bullets", 7, 2)
-
-def spawn_bazooka(team):
-    unit_types = get_units()
-    return Unit(unit_types[2], team, "Foot", 3, True, 6, 0.9, "Piercing", 6)
-
-def spawn_mortar(team):
-    unit_types = get_units()
-    return Unit(unit_types[3], team, "Foot", 2, False, 6, 0.9, "Explosives", 5, 3, 2)
-
-def spawn_biker(team):
-    unit_types = get_units()
-    return Unit(unit_types[4], team, "Wheels", 5, True, 6, 1, "Bullets", 6)
-
-def spawn_jeep(team):
-    unit_types = get_units()
-    return Unit(unit_types[5], team, "Wheels", 7, False, 4, 1.4, "Explosives", 4)
-    
-def spawn_lighttank(team):
-    unit_types = get_units()
-    return Unit(unit_types[6], team, "Wheels", 6, False, 4, 1.8, "Bullets", 7)
-
-def spawn_tank(team):
-    unit_types = get_units()
-    return Unit(unit_types[7], team, "Tracks", 5, True, 4, 2.4, "Piercing", 7)
-
-def spawn_heavytank(team):
-    unit_types = get_units()
-    return Unit(unit_types[8], team, "Tracks", 4, True, 4, 2.8, "Piercing", 9)
-
-def spawn_flamethrower(team):
-    unit_types = get_units()
-    return Unit(unit_types[9], team, "Tracks", 5, True, 2, 2.6, "Explosives", 6)
-
-def spawn_artillery(team):
-    unit_types = get_units()
-    return Unit(unit_types[10], team, "Tracks", 5, True, 5, 2.2, "Piercing", 8, 4, 2)
-
-def spawn_rocketlauncher(team):
-    unit_types = get_units()
-    return Unit(unit_types[11], team, "Wheels", 5, True, 6, 1.6, "Explosives", 7, 5, 2)
-
-def spawn_unit(team, type):
+def spawn_unit(team: str, type: str = "Gunner") -> object:
+    """Gets the requested unit and returns with it for the given team."""
     unit_types = get_units()
     if type == unit_types[0]:
-        return spawn_infantry(team)
+        # UNIT 1 - GUNNER
+        return Unit(type, team, "Foot", 3, True, 7, 0.9, "Bullets", 5)
     elif type == unit_types[1]:
-        return spawn_sniper(team)
+        # UNIT 2 - SNIPER
+        return Unit(type, team, "Foot", 2, True, 8, 0.8, "Bullets", 7, 2)
     elif type == unit_types[2]:
-        return spawn_bazooka(team)
+        # UNIT 3 - BAZOOKA
+        return Unit(type, team, "Foot", 3, True, 7, 1, "Piercing", 6)
     elif type == unit_types[3]:
-        return spawn_mortar(team)
+        # UNIT 4 - MORTAR
+        return Unit(type, team, "Foot", 2, False, 7, 0.8, "Explosives", 5, 3, 2)
     elif type == unit_types[4]:
-        return spawn_biker(team)
+        # UNIT 5 - BIKER
+        return Unit(type, team, "Wheels", 5, True, 6, 1, "Bullets", 5)
     elif type == unit_types[5]:
-        return spawn_jeep(team)
+        # UNIT 6 - JEEP
+        return Unit(type, team, "Wheels", 7, False, 4, 1.4, "Explosives", 4)
     elif type == unit_types[6]:
-        return spawn_lighttank(team)
+        # UNIT 7 - LIGHT TANK
+        return Unit(type, team, "Wheels", 6, False, 4, 1.8, "Bullets", 7)
     elif type == unit_types[7]:
-        return spawn_tank(team)
+        # UNIT 8 - TANK
+        return Unit(type, team, "Tracks", 5, True, 4, 2.4, "Piercing", 7)
     elif type == unit_types[8]:
-        return spawn_heavytank(team)
+        # UNIT 9 - HEAVY TANK
+        return Unit(type, team, "Tracks", 4, True, 4, 2.8, "Piercing", 9)
     elif type == unit_types[9]:
-        return spawn_flamethrower(team)
+        # UNIT 10 - FLAMETHROWER
+        return Unit(type, team, "Tracks", 5, True, 2, 2.4, "Explosives", 6)
     elif type == unit_types[10]:
-        return spawn_artillery(team)
+        # UNIT 11 - ARTILERY
+        return Unit(type, team, "Tracks", 5, True, 5, 2.2, "Piercing", 8, 4, 2)
     elif type == unit_types[11]:
-        return spawn_rocketlauncher(team)
+        # UNIT 12 - ROCKET LAUNCHER
+        return Unit(type, team, "Wheels", 5, True, 6, 1.6, "Explosives", 7, 5, 2)
 
-def __block_translator(onblock, window, onwindow):
+def __block_translator(onblock: object, window, onwindow):
+    """"""
     images = __UnitImages()
     if onblock.identifier == 'H':
         if onblock.team == 'Red':
             window.blit(images.INF_1, onwindow)
-            return spawn_infantry('Red')
+            return spawn_unit('Red')
         elif onblock.team == 'Blue':
             window.blit(images.INF_2, onwindow)
-            return spawn_infantry('Blue')
+            return spawn_unit('Blue')
     return None
 
 def block_draw(onblock, window, onwindow):
