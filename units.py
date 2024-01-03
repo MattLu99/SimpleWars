@@ -36,7 +36,8 @@ class Unit:
     attacked = True
     health = 100
 
-    def __init__(self, type, team, movement, speed, capture, defense, armor, ammunition, attack, maxrange=1, minrange=1):
+    def __init__(self, type: str, team: str, movement: str, speed: int, capture: bool, 
+                 defense: float, armor: float, ammunition: str, attack: float, maxrange: int = 1, minrange: int = 1):
         #IDENTIFIER
         self.type = type
         self.team = team
@@ -122,7 +123,7 @@ def get_prices() -> list:
     """Function for statically storing the prices of all of the units."""
     return {0: 10, 1: 40, 2: 30, 3: 70, 4: 50, 5: 80, 6: 80, 7: 100, 8: 160, 9: 120, 10: 130, 11: 180, 12: 0, 13: 0, 14: 0, 15: 0}
 
-def spawn_unit(team: str, type: str = "Gunner") -> object:
+def spawn_unit(team: str, type: str = "Gunner") -> Unit:
     """Gets the requested unit and returns with it for the given team."""
     unit_types = get_units()
     if type == unit_types[0]:
@@ -162,8 +163,8 @@ def spawn_unit(team: str, type: str = "Gunner") -> object:
         # UNIT 12 - ROCKET LAUNCHER
         return Unit(type, team, "Wheels", 5, True, 6, 1.6, "Explosives", 7, 5, 2)
 
-def __block_translator(onblock: object, window, onwindow):
-    """"""
+def __block_translator(onblock: object, window: object, onwindow: tuple) -> Unit:
+    """Private Terrain handler function that automatically places Gunner units on both HQs."""
     images = __UnitImages()
     if onblock.identifier == 'H':
         if onblock.team == 'Red':
@@ -174,7 +175,8 @@ def __block_translator(onblock: object, window, onwindow):
             return spawn_unit('Blue')
     return None
 
-def block_draw(onblock, window, onwindow):
+def block_draw(onblock: Unit, window: object, onwindow: tuple) -> None:
+    """Function that takes in placement data and draws the unit on the game window."""
     images = __UnitImages()
     unit_types = get_units()
     if onblock.team == "Red":
@@ -228,7 +230,8 @@ def block_draw(onblock, window, onwindow):
         elif onblock.type == unit_types[11]:
             window.blit(images.RKL_2, onwindow)
 
-def drawadd(window, BLOCK, terrainmap, xrn, yrn):
+def drawadd(window: object, BLOCK: int, terrainmap: list[list], xrn: int, yrn: int) -> list[list]:
+    """Function that initializes the basic unit map and adds the default units to it."""
     unitmap = [[None  for i in range(yrn)] for j in range(xrn)]
     row = 0
     for xon in range(0, xrn * BLOCK, BLOCK):
