@@ -138,7 +138,7 @@ class Window:
         except PermissionError:
             return [], 0, 0
 
-    def __map_fits_needs(self, rawmap: [], x: int, y: int) -> bool:
+    def __map_fits_needs(self, rawmap: list[list], x: int, y: int) -> bool:
         """Checks if the selected map is valid and can be played on."""
         hqnum = 0
         wsnum = 0

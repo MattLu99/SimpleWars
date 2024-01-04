@@ -2,7 +2,7 @@
 ### About the project
 This is a project I made for a university assignment in 2019 for the purpose of learning how to use Python. The game is heavily based on the “Advance Wars” game series and many of its features are similar, however certain features/mechanics are very different: addition of more infantry units, difference in damage calculation (new damage types that perform differently based on attacked unit’s armor), absence of aerial and naval units, body-blocking, lack of ammunition and transports.<br/>
 The making of this game was a great learning experience and it took me approximately 140 hours to make the whole thing (not counting the time I spent learning Python). The setup window uses TKinter and the actual game uses pygame. The game can store the history of the previously played games in a text file, which is limited to a maximum of 10 game data stored.
-The project is mostly in the same way it was back in 2019, I like to preserve it in an “as-it-was-made” state. Only modifications I have made since have been made to make the code more readable or generally improve its documentation.
+The project is mostly in the same way it was back in 2019, I like to preserve it in an “as-it-was-made” state, because it shows my way of thinking before I really learned to apply many different types of algorithms and data structures. Only modifications I have made since have been made to make the code more readable or generally improve its documentation.
 ### Start the game
 You can run the game if you: have Python and pygame (pip3 install pygame) installed on your system. If you meet these requirements then all you have to do is run the “SimpleWars.pyw” file and the game should start. The game requires two players to play, have fun!
 
@@ -18,7 +18,7 @@ Unit capture: right-click on the tile the unit is on.<br/>
 End turn: left-click on the "End Turn" button.<br/>
 Exit: left-click on the "Exit" button.
 ### Keyboard
-Movement: W/^ - Up, A/< - Left, S/ˇ - Down, D/> - Right<br/>
+Movement: W/Arrow key up - Up, A/Arrow key left - Left, S/Arrow key down - Down, D/Arrow key right - Right<br/>
 Capture: Space, End turn: Enter, Exit: Escape
 
 ## How to make your own maps
