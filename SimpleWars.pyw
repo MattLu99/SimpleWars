@@ -1,8 +1,7 @@
 import menu
 
-#https://github.com/MattLu99/SimpleWars
-
 def main() -> None:
+    """Loads the program by calling the menu and starting its setup."""
     simplewars = menu.Window()
     simplewars.game_start()
 
